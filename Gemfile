@@ -6,6 +6,7 @@ gem 'webmachine'
 gem 'twilio-ruby'
 gem 'rest-client'
 gem 'json'
+gem 'nokogiri'
 gem 'pg' # Required by Engine Yard
 
 group :development do

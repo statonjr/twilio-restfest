@@ -2,6 +2,7 @@ require 'rest_client'
 require 'json'
 require './lib/helpdesk/twilio'
 require 'twilio-ruby'
+require 'nokogiri'
 
 class TicketResource < Webmachine::Resource
 
@@ -25,14 +26,23 @@ class TicketResource < Webmachine::Resource
     # Here's the request body from Twilio
     # We want the 'Body' key
     # We'll use this as the description
-    # TODO: Stuff this into XML per the media type
     description = JSON.parse(request.body.to_s)['Body']
     # We also need to know what phone number sent the SMS message
     reply_to = JSON.parse(request.body.to_s)['From']
     reply_from = JSON.parse(request.body.to_s)['To']
+    # Find the tickets URL
+    response = RestClient.get("http://restdesk.herokuapp.com")
+    doc = Nokogiri::XML(response.body)
+    url = doc.xpath('//atom:link[@rel="http://helpdesk.hackday.2012.restfest.org/rels/tickets"]')[0].attr(:href)
+    # Create the XML
+    builder = Nokogiri::XML::Builder.new do |xml|
+      xml.ticket {
+        xml.description description
+      }
+    end
     # PUT to our API to create our ticket
-    # response = RestClient.put('http://restdesk.herokuapp.com',
-    # description, :content_type =>
+    # response = RestClient.put(url,
+    # builder.to_xml, :content_type =>
     # 'application/vnd.org.restfest.2012.hackday+xml'
     # Return the status back to the client via SMS
     account_sid = TwilioConfig::ACCOUNT_SID
@@ -41,7 +51,7 @@ class TicketResource < Webmachine::Resource
     client.account.sms.messages.create(
       :from => reply_from,
       :to => reply_to,
-      :body => "Test" # response.body?
+      :body => "Test!!" # response.body?
     )
     true
   end
