@@ -7,6 +7,6 @@ require 'webmachine/adapter'
 require 'webmachine/adapters/rack'
 
 # Application
-require 'lib/helpdesk'
+require './lib/helpdesk'
 
 run HelpDesk.adapter

@@ -1,5 +1,5 @@
 require 'webmachine'
-require 'lib/helpdesk/resources'
+require './lib/helpdesk/resources'
 
 HelpDesk = Webmachine::Application.new do |app|
   # Routing

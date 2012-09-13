@@ -1,1 +1,1 @@
-require 'lib/helpdesk/resources/ticket'
+require './lib/helpdesk/resources/ticket'

@@ -1,0 +1,9 @@
+HTTP/1.1 201 Created
+Server: nginx
+Date: Thu, 13 Sep 2012 18:37:28 GMT
+Content-Type: application/json
+Content-Length: 505
+Connection: close
+Etag: 
+
+{"sid":"SM360ac65346f6ebefd66e2779b81a1b9a","date_created":"Thu, 13 Sep 2012 18:37:28 +0000","date_updated":"Thu, 13 Sep 2012 18:37:28 +0000","date_sent":null,"account_sid":"AC4892c90db0eec48b24a6b430ae603202","to":"+17048779901","from":"+18644385266","body":"We received your help desk request.","status":"queued","direction":"outbound-api","api_version":"2010-04-01","price":null,"uri":"\/2010-04-01\/Accounts\/AC4892c90db0eec48b24a6b430ae603202\/SMS\/Messages\/SM360ac65346f6ebefd66e2779b81a1b9a.json"}

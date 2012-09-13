@@ -5,6 +5,7 @@ gem 'rack'
 gem 'webmachine'
 gem 'twilio-ruby'
 gem 'rest-client'
+gem 'json'
 gem 'pg' # Required by Engine Yard
 
 group :development do
@@ -16,4 +17,5 @@ group :test do
   gem 'rspec'
   gem 'cucumber'
   gem 'rack-test'
+  gem 'webmock'
 end
