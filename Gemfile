@@ -1,6 +1,7 @@
 source :rubygems
 
 gem 'rake'
+gem 'rack'
 gem 'webmachine'
 gem 'twilio-ruby'
 gem 'rest-client'
@@ -14,4 +15,5 @@ end
 group :test do
   gem 'rspec'
   gem 'cucumber'
+  gem 'rack-test'
 end
