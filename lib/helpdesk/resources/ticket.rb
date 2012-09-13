@@ -49,16 +49,21 @@ class TicketResource < Webmachine::Resource
     response = RestClient.get("http://restdesk.herokuapp.com")
     doc = Nokogiri::XML(response.body)
     url = doc.xpath('//atom:link[@rel="http://helpdesk.hackday.2012.restfest.org/rels/tickets"]')[0].attr(:href)
+
     # Create the XML
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.ticket {
         xml.description description
       }
     end
+
     # PUT to our API to create our ticket
-    # response = RestClient.put(url,
-    # builder.to_xml, :content_type =>
-    # 'application/vnd.org.restfest.2012.hackday+xml'
+    t = Thread.new do
+      Thread.current[:restdesk_response] = RestClient.post(url, builder.to_xml, :content_type => 'application/vnd.org.restfest.2012.hackday+xml')
+    end
+    t.join
+    restdesk_headers = t[:restdesk_response].headers
+
     # Return the status back to the client via SMS
     account_sid = TwilioConfig::ACCOUNT_SID
     auth_token = TwilioConfig::AUTH_TOKEN
@@ -66,7 +71,7 @@ class TicketResource < Webmachine::Resource
     client.account.sms.messages.create(
       :from => reply_from,
       :to => reply_to,
-      :body => "We received your help desk request. Thanks!" # response.body?
+      :body => "We received your help desk request. You can GET more info at this URL: #{restdesk_headers[:content_location]}"
     )
     true
   end
