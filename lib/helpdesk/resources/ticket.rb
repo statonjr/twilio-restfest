@@ -1,6 +1,7 @@
 require 'rest_client'
 require 'json'
 require './lib/helpdesk/twilio'
+require 'twilio-ruby'
 
 class TicketResource < Webmachine::Resource
 
