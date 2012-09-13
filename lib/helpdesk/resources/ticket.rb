@@ -1,10 +1,23 @@
 require 'rest_client'
-require 'json'
 require './lib/helpdesk/twilio'
 require 'twilio-ruby'
 require 'nokogiri'
+require 'cgi'
 
 class TicketResource < Webmachine::Resource
+
+  # TODO: Move this into a Module with the CGI require
+  def params
+    @params = {}
+    request.body.to_s.split(/&/).each do |kv|
+      key, value = kv.split(/=/)
+      if key && value
+        key, value = CGI.unescape(key), CGI.unescape(value)
+        @params[key] = value
+      end
+    end
+    @params
+  end
 
   def allowed_methods
     %W[POST]
@@ -25,11 +38,13 @@ class TicketResource < Webmachine::Resource
   def process_post
     # Here's the request body from Twilio
     # We want the 'Body' key
+    puts params
     # We'll use this as the description
-    description = JSON.parse(request.body.to_s)['Body']
+    description = params['Body']
     # We also need to know what phone number sent the SMS message
-    reply_to = JSON.parse(request.body.to_s)['From']
-    reply_from = JSON.parse(request.body.to_s)['To']
+    reply_to = params['From']
+    reply_from = params['To']
+
     # Find the tickets URL
     response = RestClient.get("http://restdesk.herokuapp.com")
     doc = Nokogiri::XML(response.body)
@@ -51,7 +66,7 @@ class TicketResource < Webmachine::Resource
     client.account.sms.messages.create(
       :from => reply_from,
       :to => reply_to,
-      :body => "Test!!" # response.body?
+      :body => "We received your help desk request. Thanks!" # response.body?
     )
     true
   end
