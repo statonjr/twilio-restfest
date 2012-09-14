@@ -38,7 +38,6 @@ class TicketResource < Webmachine::Resource
   def process_post
     # Here's the request body from Twilio
     # We want the 'Body' key
-    puts params
     # We'll use this as the description
     description = params['Body']
     # We also need to know what phone number sent the SMS message
@@ -57,7 +56,7 @@ class TicketResource < Webmachine::Resource
       }
     end
 
-    # PUT to our API to create our ticket
+    # POST to our API to create our ticket
     t = Thread.new do
       Thread.current[:restdesk_response] = RestClient.post(url, builder.to_xml, :content_type => 'application/vnd.org.restfest.2012.hackday+xml')
     end
@@ -82,13 +81,6 @@ class TicketResource < Webmachine::Resource
     when [204,205,304].include?(response.code)
       response.headers.delete 'Content-Type'
     end
-  end
-
-  def content_types_accepted
-    [['application/json', :ticket_status]]
-  end
-
-  def ticket_status
   end
 
 end
