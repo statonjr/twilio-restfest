@@ -1,0 +1,4 @@
+module TwilioConfig
+  AUTH_TOKEN = 'YOUR_AUTH_TOKEN'
+  ACCOUNT_SID = 'YOUR_ACCOUNT_SID'
+end
