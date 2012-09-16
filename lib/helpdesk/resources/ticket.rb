@@ -48,6 +48,7 @@ class TicketResource < Webmachine::Resource
     response = RestClient.get("http://restdesk.herokuapp.com")
     doc = Nokogiri::XML(response.body)
     url = doc.xpath('//atom:link[@rel="http://helpdesk.hackday.2012.restfest.org/rels/tickets"]')[0].attr(:href)
+    content_type = doc.xpath('//atom:link[@rel="http://helpdesk.hackday.2012.restfest.org/rels/tickets"]')[0].attr(:type)
 
     # Create the XML
     builder = Nokogiri::XML::Builder.new do |xml|
@@ -58,7 +59,7 @@ class TicketResource < Webmachine::Resource
 
     # POST to our API to create our ticket
     t = Thread.new do
-      Thread.current[:restdesk_response] = RestClient.post(url, builder.to_xml, :content_type => 'application/vnd.org.restfest.2012.hackday+xml')
+      Thread.current[:restdesk_response] = RestClient.post(url, builder.to_xml, :content_type => content_type)
     end
     t.join
     restdesk_headers = t[:restdesk_response].headers
