@@ -93,7 +93,7 @@ GEM
     webmock (1.8.10)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
-    yard (0.8.2.1)
+    yard (0.9.20)
 
 PLATFORMS
   ruby
